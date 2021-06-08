@@ -9,7 +9,7 @@ namespace BlazorPi.Services
 {
     public class GameStateService : IGameStateService
     {
-        public int Score { get; private set; } = 50;
+        public int Score { get; private set; }
         public int HighScore { get; private set; }
         public bool GameOver { get; private set; }
         public bool Animating { get; private set; }
