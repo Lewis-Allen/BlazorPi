@@ -1,7 +1,65 @@
 ﻿@page "/"
+@inject IGameStateService GameStateService 
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<div id="background" class="jumbotron m-0 p-0" @onkeydown="@KeyDownAsync" tabindex="0" @ref="GameDiv">
+    <h1> S: @GameStateService.Score</h1>
+    <h1>HS: @GameStateService.HighScore</h1>
+    <h1 class="game-over">@(GameStateService.GameOver ? $" Game Over - The next digit was {Constants.PI[GameStateService.Score]}." : "")</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <div class="d-flex flex-row-reverse" style="margin-right: 50%;">
+        @for(var i = 0; i < 50; i++)
+        {
+            int current = i;
+            <span class="@(i == 0 ? "text-success" : "") @(GameStateService.Animating ? "move-left" : "")" style="min-width: 32px; font-size: 32px;">
+                @(GameStateService.Score > current ? Constants.PI[GameStateService.Score - (current + 1)] : "")
+            </span>
+        }
+
+    </div>
+</div>
+
+@code {
+
+    protected ElementReference GameDiv;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await GameStateService.Initialize();
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await SetFocusAsync();
+    }
+
+    protected async Task SetFocusAsync()
+    {
+        await GameDiv.FocusAsync();
+    }
+
+    private string[] SupportedKeys = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "r" };
+
+    protected async Task KeyDownAsync(KeyboardEventArgs args)
+    {
+        if (!SupportedKeys.Contains(args.Key))
+            return;
+
+        Console.WriteLine($"Key is {args.Key}");
+
+        if(args.Key == "r")
+        {
+            await ResetAsync();
+            return;
+        }
+
+        await GameStateService.ChooseDigit(args.Key[0]);
+    }
+
+    public async Task ResetAsync()
+    {
+        await GameStateService.ResetGame();
+        await SetFocusAsync();
+    }
+} 

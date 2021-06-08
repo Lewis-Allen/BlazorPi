@@ -1,0 +1,25 @@
+﻿#background, #main-container {
+    min-height: 100vh;
+    height: 100%;
+    background-color: #fdf4f5;
+    overflow-x: hidden;
+}
+
+.game-over {
+    color: red;
+}
+
+.move-left {
+    animation-name: slide-left;
+    animation-duration: 0.1s;
+}
+
+@keyframes slide-left {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
