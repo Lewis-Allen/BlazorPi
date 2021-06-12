@@ -1,0 +1,81 @@
+/* /Pages/Index.razor.rz.scp.css */
+#background[b-cx5ruo98e1], #main-container[b-cx5ruo98e1] {
+    min-height: 100vh;
+    height: 100%;
+    background-color: #fdf4f5;
+    overflow-x: hidden;
+}
+
+.page-container[b-cx5ruo98e1] {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.keypad-button[b-cx5ruo98e1] {
+    width: 95px;
+    height: 95px;
+    margin: 5px;
+    font-size: 32px;
+    border: 3px solid black;
+}
+
+.score-heading[b-cx5ruo98e1] {
+    text-align: center;
+}
+
+.game-over[b-cx5ruo98e1] {
+    color: red;
+    margin: 0;
+    font-size: 20px;
+}
+
+.move-left[b-cx5ruo98e1] {
+    animation-name: slide-left-b-cx5ruo98e1;
+    animation-duration: 0.1s;
+}
+
+@keyframes slide-left-b-cx5ruo98e1 {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.shrink[b-cx5ruo98e1] {
+    animation-name: shrink-b-cx5ruo98e1;
+    animation-duration: 0.4s;
+}
+
+@keyframes shrink-b-cx5ruo98e1 {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(0);
+    }
+}
+
+@keyframes glowing-b-cx5ruo98e1 {
+    0% {
+        background-color: #2ba805;
+        box-shadow: 0 0 5px #2ba805;
+    }
+
+    50% {
+        background-color: #49e819;
+        box-shadow: 0 0 20px #49e819;
+    }
+
+    100% {
+        background-color: #2ba805;
+        box-shadow: 0 0 5px #2ba805;
+    }
+}
+
+.glow[b-cx5ruo98e1] {
+    animation: glowing-b-cx5ruo98e1 1000ms infinite;
+}
