@@ -39,11 +39,11 @@ namespace BlazorPi.Services
             if(number == current)
             {
                 Animating = true;
-                
-                await Task.Delay(75);
 
-                Animating = false;
+                await Task.Delay(50);
+
                 Score++;
+                Animating = false;
 
                 if (Score > HighScore)
                 {

@@ -3,25 +3,78 @@
 
 
 <div id="background" class="jumbotron m-0 p-0" @onkeydown="@KeyDownAsync" tabindex="0" @ref="GameDiv">
-    <h1> S: @GameStateService.Score</h1>
-    <h1>HS: @GameStateService.HighScore</h1>
-    <h1 class="game-over">@(GameStateService.GameOver ? $" Game Over - The next digit was {Constants.PI[GameStateService.Score]}." : "")</h1>
+    <h1 class="score-heading"> S: @GameStateService.Score</h1>
+    <h1 class="score-heading">HS: @GameStateService.HighScore</h1>
+    <div class="score-heading page-container" style="min-height: 60px;">
+        <p class="game-over">@(GameStateService.GameOver ? $"Game Over" : "")</p>
+        <p class="game-over">@(GameStateService.GameOver ? $"The next digit was {Constants.PI[GameStateService.Score]}." : "")</p>
+    </div>
 
-    <div class="d-flex flex-row-reverse" style="margin-right: 50%;">
+    <div class="d-flex flex-row-reverse page-container" style="min-height: 50px;">
         @for(var i = 0; i < 50; i++)
         {
             int current = i;
-            <span class="@(i == 0 ? "text-success" : "") @(GameStateService.Animating ? "move-left" : "")" style="min-width: 32px; font-size: 32px;">
+            <span class="@(i == 0 ? "text-success" : "") @(GameStateService.Animating ? "move-left" : "")" style="min-width: 32px;">
                 @(GameStateService.Score > current ? Constants.PI[GameStateService.Score - (current + 1)] : "")
             </span>
         }
 
+    </div>
+
+    <div class="page-container">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <button @onclick="() => Move('1')" class="btn btn-success keypad-button">1</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('2')" class="btn btn-success keypad-button">2</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('3')" class="btn btn-success keypad-button">3</button>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <button @onclick="() => Move('4')" class="btn btn-success keypad-button">4</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('5')" class="btn btn-success keypad-button">5</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('6')" class="btn btn-success keypad-button">6</button>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <button @onclick="() => Move('7')" class="btn btn-success keypad-button">7</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('8')" class="btn btn-success keypad-button">8</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('9')" class="btn btn-success keypad-button">9</button>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <button @onclick="() => ResetAsync()" class="btn @(GameStateService.GameOver ? "btn-primary" : "btn-danger") keypad-button">Res</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('0')" class="btn btn-success keypad-button">0</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('.')" class="btn btn-success keypad-button">.</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @code {
 
     protected ElementReference GameDiv;
+    private bool Moving = false;
 
     protected async override Task OnInitializedAsync()
     {
@@ -46,15 +99,34 @@
         if (!SupportedKeys.Contains(args.Key))
             return;
 
-        Console.WriteLine($"Key is {args.Key}");
-
         if(args.Key == "r")
         {
             await ResetAsync();
             return;
         }
 
-        await GameStateService.ChooseDigit(args.Key[0]);
+        await Move(args.Key[0]);
+    }
+
+    public async Task Move(char digit)
+    {
+        if (!Moving)
+        {
+            try
+            {
+                Moving = true;
+                await GameStateService.ChooseDigit(digit);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                Moving = false;
+            }
+
+        }
     }
 
     public async Task ResetAsync()
