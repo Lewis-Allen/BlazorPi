@@ -13,6 +13,8 @@ namespace BlazorPi.Services
         public int HighScore { get; private set; }
         public bool GameOver { get; private set; }
         public bool Animating { get; private set; }
+        public int Lives { get; private set; } = 3;
+        public bool LosingLife { get; private set; }
 
         private readonly ILocalStorageService _localStorage;
 
@@ -40,7 +42,7 @@ namespace BlazorPi.Services
             {
                 Animating = true;
 
-                await Task.Delay(50);
+                await Task.Delay(75);
 
                 Score++;
                 Animating = false;
@@ -55,13 +57,22 @@ namespace BlazorPi.Services
             }
             else
             {
-                GameOver = true;
+                LosingLife = true;
+
+                await Task.Delay(375);
+
+                Lives--;
+                LosingLife = false;
+
+                if(Lives == 0)
+                    GameOver = true;
             }
         }
 
         public async Task ResetGame()
         {
             Score = 0;
+            Lives = 3;
             GameOver = false;
         }
     }

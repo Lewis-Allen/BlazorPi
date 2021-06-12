@@ -5,66 +5,78 @@
 <div id="background" class="jumbotron m-0 p-0" @onkeydown="@KeyDownAsync" tabindex="0" @ref="GameDiv">
     <h1 class="score-heading"> S: @GameStateService.Score</h1>
     <h1 class="score-heading">HS: @GameStateService.HighScore</h1>
-    <div class="score-heading page-container" style="min-height: 60px;">
-        <p class="game-over">@(GameStateService.GameOver ? $"Game Over" : "")</p>
-        <p class="game-over">@(GameStateService.GameOver ? $"The next digit was {Constants.PI[GameStateService.Score]}." : "")</p>
+    <div class="score-heading page-container" style="min-height: 60px; color: red;">
+
+        @if (GameStateService.GameOver)
+        {
+            <p class="game-over">@(GameStateService.GameOver ? $"Game Over" : "")</p>
+            <p class="game-over">@(GameStateService.GameOver ? $"The next digit was {Constants.PI[GameStateService.Score]}." : "")</p>
+        }
+        else
+        {
+            <span>Lives: </span>
+            @for (int i = 0; i < GameStateService.Lives; i++)
+            {
+                <span class="@(GameStateService.LosingLife && i == GameStateService.Lives - 1 ? "shrink" : "") oi oi-heart"></span>
+            }
+        }
     </div>
 
+
     <div class="d-flex flex-row-reverse page-container" style="min-height: 50px;">
-        @for(var i = 0; i < 50; i++)
+        @for (var i = 0; i < 50; i++)
         {
             int current = i;
             <span class="@(i == 0 ? "text-success" : "") @(GameStateService.Animating ? "move-left" : "")" style="min-width: 32px;">
                 @(GameStateService.Score > current ? Constants.PI[GameStateService.Score - (current + 1)] : "")
             </span>
         }
-
     </div>
 
     <div class="page-container">
         <div class="container">
             <div class="row no-gutters">
                 <div class="col-4">
-                    <button @onclick="() => Move('1')" class="btn btn-success keypad-button">1</button>
+                    <button @onclick="() => Move('1')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">1</button>
                 </div>
                 <div class="col-4">
-                    <button @onclick="() => Move('2')" class="btn btn-success keypad-button">2</button>
+                    <button @onclick="() => Move('2')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">2</button>
                 </div>
                 <div class="col-4">
-                    <button @onclick="() => Move('3')" class="btn btn-success keypad-button">3</button>
-                </div>
-            </div>
-            <div class="row no-gutters">
-                <div class="col-4">
-                    <button @onclick="() => Move('4')" class="btn btn-success keypad-button">4</button>
-                </div>
-                <div class="col-4">
-                    <button @onclick="() => Move('5')" class="btn btn-success keypad-button">5</button>
-                </div>
-                <div class="col-4">
-                    <button @onclick="() => Move('6')" class="btn btn-success keypad-button">6</button>
+                    <button @onclick="() => Move('3')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">3</button>
                 </div>
             </div>
             <div class="row no-gutters">
                 <div class="col-4">
-                    <button @onclick="() => Move('7')" class="btn btn-success keypad-button">7</button>
+                    <button @onclick="() => Move('4')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">4</button>
                 </div>
                 <div class="col-4">
-                    <button @onclick="() => Move('8')" class="btn btn-success keypad-button">8</button>
+                    <button @onclick="() => Move('5')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">5</button>
                 </div>
                 <div class="col-4">
-                    <button @onclick="() => Move('9')" class="btn btn-success keypad-button">9</button>
+                    <button @onclick="() => Move('6')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">6</button>
                 </div>
             </div>
             <div class="row no-gutters">
                 <div class="col-4">
-                    <button @onclick="() => ResetAsync()" class="btn @(GameStateService.GameOver ? "btn-primary" : "btn-danger") keypad-button">Res</button>
+                    <button @onclick="() => Move('7')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">7</button>
                 </div>
                 <div class="col-4">
-                    <button @onclick="() => Move('0')" class="btn btn-success keypad-button">0</button>
+                    <button @onclick="() => Move('8')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">8</button>
                 </div>
                 <div class="col-4">
-                    <button @onclick="() => Move('.')" class="btn btn-success keypad-button">.</button>
+                    <button @onclick="() => Move('9')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">9</button>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <button @onclick="() => ResetAsync()" class="btn btn-danger keypad-button @(GameStateService.GameOver ? "glow" : "")">Res</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('0')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">0</button>
+                </div>
+                <div class="col-4">
+                    <button @onclick="() => Move('.')" class="btn btn-success keypad-button" disabled="@(GameStateService.GameOver)">.</button>
                 </div>
             </div>
         </div>

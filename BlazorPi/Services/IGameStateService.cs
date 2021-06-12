@@ -12,6 +12,8 @@ namespace BlazorPi.Services
         bool Animating { get; }
         int Score { get; }
         int HighScore { get; }
+        int Lives { get; }
+        bool LosingLife { get; }
 
         Task Initialize();
         Task ChooseDigit(char digit);
